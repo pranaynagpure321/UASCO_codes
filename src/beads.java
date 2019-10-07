@@ -1,12 +1,32 @@
+/*
+        ID: pranayn2
+        LANG: JAVA
+        PROG: beads
+        */
+
+
+
+import java.io.*;
+
 public class beads {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception{
 
+        BufferedReader f = new BufferedReader(new FileReader("beads.in"));
 
-        System.out.println(helper("wwwbbrwrbrbrrbrbrwrwwrbwrwrrb"));
+        PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("beads.out")));
+
+        f.readLine();
+        String str = f.readLine();
+
+        int ans =  helper(str);
+        out.println(ans);                           // output result
+        out.close();
+        //System.out.println(helper("rrr"));
 
 
     }
+
 
     public static int helper(String str){
 
@@ -15,46 +35,63 @@ public class beads {
         for (int i =0 ;i< str.length() ;i++){
 
 
-            char c = str.charAt(i);
-            int countF = 0,j=i;
+            char c =str.charAt(i);
+            int countF = 0,k=i;
+            boolean colorFound =false;
 
-            while (j!=i-1){
+            if (c!='w') colorFound =true;
 
-                if (j==str.length()-1) j = j%str.length();
+            while (k!=i-1){
+                if (k==str.length()) k=k%str.length();
 
-                if(str.charAt(j)==c || str.charAt(j)=='w') countF++;
+                if (c=='w' && str.charAt(k)=='w') countF++;
+
+                else if (c=='w' && str.charAt(k)!='w' && !colorFound){
+                    colorFound=true; c=str.charAt(k); countF++;
+                }
+
+                else if (c==str.charAt(k) || str.charAt(k)=='w') countF++;
 
                 else break;
 
-                j++;
+                if (i==0 && k==str.length()-1) break;
+
+                k++;
 
             }
 
 
+            if (countF == str.length()) return countF;
 
-            if (i==0)
-            c = str.charAt(str.length()-1);
+            int j =i-1;
+            if (i==0) j=str.length()-1;
 
-            else c=str.charAt(i-1);
-            int countB=0,k=i-1;
+            c= str.charAt(j);
+            int countB = 0;
 
-            while (k!=i){
+            if (c!='w') colorFound =true;
 
-                if (k==-1) k =str.length()-1;
+            while (j!=i && j!=k-1){
 
-                if(str.charAt(k)==c || str.charAt(k)=='w') countB++;
+                if (j==-1) j=str.length()-1;
+
+                if (c=='w' && str.charAt(j)=='w') countB++;
+
+                else if (c=='w' && str.charAt(j)!='w' && !colorFound){
+                    colorFound=true; c=str.charAt(j); countB++;
+                }
+                else if (c==str.charAt(j) || str.charAt(j)=='w') countB++;
 
                 else break;
 
+                if (i==str.length()-1 && j==0) break;
 
-
-                k--;
+                j--;
 
             }
 
 
-            if (countB+countF>count)
-                count = countB+countF;
+            if (count<countB+countF) count = countB+countF;
 
 
         }
